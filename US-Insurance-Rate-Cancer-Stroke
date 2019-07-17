@@ -27,7 +27,7 @@ Cancer = read.csv("USCS_OverviewMap_Cancer.csv")
 Stroke.2016 = read.csv("stroke_morality 2016.csv")
 Stroke.2015 = read.csv("stroke_morality 2015.csv")
 Stroke.2014 = read.csv("stroke_morality 2014.csv")
-Stroke = cbind(Storke.2016$state,Stroke.2016$RATE,Stroke.2015$RATE,Stroke.2014$RATE)
+Stroke = cbind(Stroke.2016$state,Stroke.2016$RATE,Stroke.2015$RATE,Stroke.2014$RATE)
 //读取包含美国州简写与全称对照表的names.csv
 names = read.csv("names.csv")
 cor = merge(Cancer,names,by="Area")
