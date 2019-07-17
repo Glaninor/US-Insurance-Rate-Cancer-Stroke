@@ -1,6 +1,7 @@
 library(usmap)
 library(ggplot2)
 A<-as.data.frame(read.csv("Insurance Rate.csv"))
+summary(A)
 A1<-A[-which(A$IndividualRate>9998),]
 A2016<-A1[-which(A1$BusinessYear!=2016),]
 A2015<-A1[-which(A1$BusinessYear!=2015),]
@@ -8,6 +9,9 @@ A2014<-A1[-which(A1$BusinessYear!=2014),]
 a2016<-split(A2016$IndividualRate,A2016$StateCode)
 a2015<-split(A2015$IndividualRate,A2015$StateCode)
 a2014<-split(A2014$IndividualRate,A2014$StateCode)
+summary(a2016)
+summary(a2015)
+summary(a2014)
 rateMean.2016<-sapply(a2016,mean)
 rateMean.2015<-sapply(a2015,mean)
 rateMean.2014<-sapply(a2014,mean)
@@ -23,11 +27,14 @@ Cancer = read.csv("USCS_OverviewMap_Cancer.csv")
 Stroke.2016 = read.csv("stroke_morality 2016.csv")
 Stroke.2015 = read.csv("stroke_morality 2015.csv")
 Stroke.2014 = read.csv("stroke_morality 2014.csv")
-write(r,file="r.csv")
-
-//通过Excel的vlookup功能匹配Cancer与Insurance Rate中的不一致州名，并存储为COR.csv
-
-corIC<-read.csv("COR.csv")
+Stroke = cbind(Storke.2016$state,Stroke.2016$RATE,Stroke.2015$RATE,Stroke.2014$RATE)
+//读取包含美国州简写与全称对照表的names.csv
+names = read.csv("names.csv")
+cor = merge(Cancer,names,by="Area")
+CORC = merge(cor,r,by="state")
+CORS = merge(Stroke,r,by="state")
+corIC = merge(CORC,CORS,by="state")
+names(corIC)=c("state","CancerRate","rateMedian.2016","rateMean.2016","rateMedian.2015","rateMean.2015","rateMedian.2014","rateMean.2014","StrokeRate.2016","StrokeRate.2015","StrokeRate.2014")
 RateMedian.2016 = corIC$rateMedian.2016
 RateMedian.2015 = corIC$rateMedian.2015
 RateMedian.2014 = corIC$rateMedian.2014
