@@ -1,0 +1,48 @@
+library(usmap)
+library(ggplot2)
+A<-as.data.frame(read.csv("Insurance Rate.csv"))
+A1<-A[-which(A$IndividualRate>9998),]
+A2016<-A1[-which(A1$BusinessYear!=2016),]
+A2015<-A1[-which(A1$BusinessYear!=2015),]
+A2014<-A1[-which(A1$BusinessYear!=2014),]
+a2016<-split(A2016$IndividualRate,A2016$StateCode)
+a2015<-split(A2015$IndividualRate,A2015$StateCode)
+a2014<-split(A2014$IndividualRate,A2014$StateCode)
+rateMean.2016<-sapply(a2016,mean)
+rateMean.2015<-sapply(a2015,mean)
+rateMean.2014<-sapply(a2014,mean)
+rateMedian.2016<-sapply(a2016,median)
+rateMedian.2015<-sapply(a2015,median)
+rateMedian.2014<-sapply(a2014,median)
+state.df=data.frame(state=c("AK","AL","AR","AZ","DE","FL","GA","HI","IA","ID","IL","IN","KS","LA","ME","MI","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","OH","OK","OR","PA","SC","SD","TN","TX","UT","VA","WI","WV","WY"))
+r<-cbind(state.df,rateMedian.2016,rateMean.2016,rateMedian.2015,rateMean.2015,rateMedian.2014,rateMean.2014)
+r.plot.2016<-plot_usmap(data = r, values = "rateMean.2016", lines = "red") +scale_fill_continuous(low = "white", high = "brown",name = "US Medical Insurance (2014)", label = scales::comma) +theme(legend.position = "right")
+r.plot.2015<-plot_usmap(data = r, values = "rateMean.2015", lines = "red") +scale_fill_continuous(low = "white", high = "brown",name = "US Medical Insurance (2014)", label = scales::comma) +theme(legend.position = "right")
+r.plot.2014<-plot_usmap(data = r, values = "rateMean.2014", lines = "red") +scale_fill_continuous(low = "white", high = "brown",name = "US Medical Insurance (2014)", label = scales::comma) +theme(legend.position = "right")
+Cancer = read.csv("USCS_OverviewMap_Cancer.csv")
+Stroke.2016 = read.csv("stroke_morality 2016.csv")
+Stroke.2015 = read.csv("stroke_morality 2015.csv")
+Stroke.2014 = read.csv("stroke_morality 2014.csv")
+write(r,file="r.csv")
+
+//通过Excel的vlookup功能匹配Cancer与Insurance Rate中的不一致州名，并存储为COR.csv
+
+corIC<-read.csv("COR.csv")
+RateMedian.2016 = corIC$rateMedian.2016
+RateMedian.2015 = corIC$rateMedian.2015
+RateMedian.2014 = corIC$rateMedian.2014
+RateMean.2016 = corIC$rateMean.2016
+RateMean.2015 = corIC$rateMean.2015
+RateMean.2014 = corIC$rateMean.2014
+CancerRate.2016 = corIC$CancerRate
+StrokeRate.2016 = corIC$StrokeRate.2016
+StrokeRate.2015 = corIC$StrokeRate.2015
+StrokeRate.2014 = corIC$StrokeRate.2014
+corIC.median=cor.test(~RateMedian.2016+CancerRate.2016);corIC.median
+corIC.mean=cor.test(~RateMean.2016+CancerRate.2016);corIC.mean
+corIS.median.2016=cor.test(~RateMedian.2016+StrokeRate.2016);corIS.median.2016
+corIS.median.2015=cor.test(~RateMedian.2015+StrokeRate.2015);corIS.median.2015
+corIS.median.2014=cor.test(~RateMedian.2014+StrokeRate.2014);corIS.median.2014
+corIS.mean.2016=cor.test(~RateMean.2016+StrokeRate.2016);corIS.mean.2016
+corIS.mean.2015=cor.test(~RateMean.2015+StrokeRate.2015);corIS.mean.2015
+corIS.mean.2014=cor.test(~RateMean.2014+StrokeRate.2014);corIS.mean.2014
