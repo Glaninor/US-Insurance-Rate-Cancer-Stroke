@@ -28,7 +28,7 @@ Stroke.2016 = read.csv("stroke_morality 2016.csv")
 Stroke.2015 = read.csv("stroke_morality 2015.csv")
 Stroke.2014 = read.csv("stroke_morality 2014.csv")
 Stroke = cbind(Stroke.2016$state,Stroke.2016$RATE,Stroke.2015$Rate,Stroke.2014$RATE)
-//读取包含美国州简写与全称对照表的names.csv
+#读取包含美国州简写与全称对照表的names.csv
 names = read.csv("names.csv")
 Stroke[,1]=names[,2]
 names(Stroke)=c("state","StrokeRate.2016","StrokeRate.2015","StrokeRate.2014")
